@@ -4,7 +4,15 @@ pipeline {
         jdk 'java17'
         maven 'maven3'
     }
-    
+    environment {
+	    APP_NAME = "demo-dec 14"
+            RELEASE = "1.0.0"
+            DOCKER_USER = "sampledocker546"
+            DOCKER_PASS = 'docker'
+            IMAGE_NAME = "${DOCKER_USER}" + "/" + "${APP_NAME}"
+            IMAGE_TAG = "${RELEASE}-${BUILD_NUMBER}"
+	    JENKINS_API_TOKEN = credentials("JENKINS_API_TOKEN")
+    }
     stages{
         stage("Cleanup Workspace"){
                 steps {
@@ -69,7 +77,7 @@ pipeline {
        stage("Trivy Scan") {
            steps {
                script {
-	            sh ('docker run -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image ashfaque9x/register-app-pipeline:latest --no-progress --scanners vuln  --exit-code 0 --severity HIGH,CRITICAL --format table')
+	            sh ('docker run -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image sampledocker546/demo-dec 14:latest --no-progress --scanners vuln  --exit-code 0 --severity HIGH,CRITICAL --format table')
                }
            }
        }
